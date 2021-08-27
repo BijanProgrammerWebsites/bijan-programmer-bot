@@ -1,0 +1,23 @@
+{
+    "name": "bijan-programmer-bot",
+    "version": "1.0.0",
+    "description": "BijanProgrammer's Telegram Bot",
+    "main": "index.js",
+    "scripts": {
+        "start": "nodemon bot.js"
+    },
+    "keywords": [
+        "telegram",
+        "bot",
+        "automation"
+    ],
+    "author": "BijanProgrammer",
+    "license": "MIT",
+    "dependencies": {
+        "telegraf": "^3.38.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.12",
+        "prettier": "^2.3.2"
+    }
+}
