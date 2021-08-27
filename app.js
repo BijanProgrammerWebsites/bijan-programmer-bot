@@ -39,17 +39,19 @@ const updateState = async () => {
 };
 
 const mentionAllMembers = async (participants, peer, messageId) => {
+    const userIds = participants.map((x) => x.userId);
+    const users = await client.invoke(new Api.users.GetUsers({id: userIds}));
+    const usernames = users
+        .filter((user) => !user.bot)
+        .map((user) => user.username)
+        .filter((username) => !!username);
+
     const chunks = [];
     const size = 5;
-
-    for (let i = 0; i < participants.length; i += size) chunks.push(participants.slice(i, i + size));
+    for (let i = 0; i < participants.length; i += size) chunks.push(usernames.slice(i, i + size));
 
     for (const [index, chunk] of chunks.entries()) {
-        const userIds = chunk.map((x) => x.userId);
-        const users = await client.invoke(new Api.users.GetUsers({id: userIds}));
-        const usernames = users.filter((user) => !user.bot).map((user) => user.username);
-
-        const message = usernames.map((username) => `@${username}`).join(' ');
+        const message = chunk.map((username) => `@${username}`).join(' ');
         await client.invoke(
             new Api.messages.SendMessage({
                 peer,
