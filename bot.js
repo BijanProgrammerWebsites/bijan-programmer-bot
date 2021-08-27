@@ -1,6 +1,8 @@
-const Telegraf = require('telegraf');
+const {Telegraf} = require('telegraf');
 
-const bot = new Telegraf('1469026585:AAFQ_auIItyC9WBX1UNQiEjwXjakPoOKxWo');
+require('dotenv').config();
+
+const bot = new Telegraf(process.env.TOKEN);
 
 bot.start((context) => {
     context.reply(`Hello, ${context.from.first_name} :D`).then();
@@ -15,11 +17,11 @@ bot.settings((context) => {
 });
 
 bot.command('id', (context) => {
-    context.reply(context.chat.id).then();
+    context.reply(context.chat.id.toString()).then();
 });
 
 bot.command('rand', (context) => {
-    context.reply(Math.random()).then();
+    context.reply(Math.random().toString()).then();
 });
 
 bot.command('md', (context) => {
@@ -41,9 +43,11 @@ bot.hears(['hi', 'hello'], (context) => {
     context.reply(`Hello, ${context.from.first_name} :D`).then();
 });
 
-bot.hears('@all', (context) => {
-    bot.telegram.getChatMembersCount(context.chat.id).then((count) => {
-        context.reply(count.toString()).then();
+bot.hears(/@all/g, async (context) => {
+    const count = await bot.telegram.getChatMembersCount(context.chat.id);
+    await context.reply(count.toString(), {reply_to_message_id: context.update.message.message_id});
+    await context.reply(context.update.message.message_id.toString(), {
+        reply_to_message_id: context.update.message.message_id,
     });
 });
 
