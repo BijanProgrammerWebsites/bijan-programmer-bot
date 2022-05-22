@@ -5,7 +5,8 @@ const fs = require('fs');
 
 require('dotenv').config();
 
-const {API_ID, API_HASH, SESSION_ID} = process.env;
+const {API_ID, API_HASH, BIJAN_EISAPOUR_SESSION_ID, BIJAN_PROGRAMMER_SESSION_ID} = process.env;
+const SESSION_ID = BIJAN_EISAPOUR_SESSION_ID;
 const stringSession = new StringSession(SESSION_ID || '');
 
 let client;
