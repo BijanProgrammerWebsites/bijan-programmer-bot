@@ -6,7 +6,7 @@ const fs = require('fs');
 require('dotenv').config();
 
 const {API_ID, API_HASH, BIJAN_EISAPOUR_SESSION_ID, BIJAN_PROGRAMMER_SESSION_ID} = process.env;
-const SESSION_ID = BIJAN_EISAPOUR_SESSION_ID;
+const SESSION_ID = BIJAN_PROGRAMMER_SESSION_ID;
 const stringSession = new StringSession(SESSION_ID || '');
 
 let client;
@@ -22,9 +22,11 @@ const login = async () => {
 
     await client.start({
         phoneNumber: async () => await input.text('Please enter your number: '),
-        password: async () => await input.text('Please enter your password: '),
-        phoneCode: async () => await input.text('Please enter the code you received: '),
+        password: async (hint) => await input.text(`Please enter your password (${hint}): `),
+        phoneCode: async (isCodeViaApp) =>
+            await input.text(`Please enter the code you received (${isCodeViaApp ? 'App' : 'SMS'}): `),
         onError: (err) => console.log(err),
+        forceSMS: false,
     });
 
     if (!SESSION_ID) console.log('Session ID:', client.session.save());
